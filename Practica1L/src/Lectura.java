@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -71,5 +72,13 @@ public class Lectura {
 		}catch(Exception e){
 			System.out.println("Hay error en la lectura del archivo");
 		}
+		try {
+			br.close();
+			fr.close();
+		
+		} catch (IOException e) {
+			System.out.println("No se pudo cerrar el BufferedReader");
+		}
 	}
+	
 }

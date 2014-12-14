@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -106,13 +107,19 @@ public class Inicio extends JFrame implements ActionListener {
 		JButton btnNewButton = new JButton("Aceptar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				String etiqueta= (String) comboBox.getSelectedItem();
+				int contador=0;
+				while(etiqueta!=Lectura.texto.get(contador)){
+					contador++;
+				}
+				String text= Lectura.texto.get(contador+1);
+				txtHola.setText(text);
 			}
 		});
 		btnNewButton.setBackground(new Color(95, 158, 160));
 		btnNewButton.setForeground(new Color(139, 0, 0));
 		btnNewButton.setFont(new Font("SimHei", Font.BOLD, 20));
-		btnNewButton.setBounds(362, 105, 109, 39);
+		btnNewButton.setBounds(362, 105, 133, 39);
 		contentPane.add(btnNewButton);
 		
 	}
