@@ -13,11 +13,7 @@ public class Lectura {
 	static ArrayList <String> texto = new ArrayList <String>();
 	
 	public Lectura(String direccion){
-		/*if(texto.get(0)!=null){
-		 for(int i=0;i<texto.size();i++){
-			 texto.remove(i);
-		 }
-		}*/
+		
 		try{
 			archivo =new File(direccion);
 			fr= new FileReader(archivo);
@@ -64,11 +60,7 @@ public class Lectura {
 				 
 
 				 }
-			}
-			 
-			 for (int i=0; i<texto.size();i++){
-				 System.out.println(texto.get(i));
-			 }	 
+			} 
 		}catch(Exception e){
 			System.out.println("Hay error en la lectura del archivo");
 		}
