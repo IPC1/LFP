@@ -35,9 +35,10 @@ public class Inicio extends JFrame implements ActionListener {
 	JMenuItem mntmDatosDeAutor = new JMenuItem("Datos de Autor");
 	JFileChooser fileC= new JFileChooser();
 	
-	private JTextField txtHola;
+	//private JTextField txtHola;
 	JComboBox comboBox = new JComboBox();
 	JTextPane txtpnPa = new JTextPane();
+	JTextPane txtHola = new JTextPane();
 	JLabel lblTexto = new JLabel("Texto");
 	JButton btnRegresar = new JButton("Regresar");
 	
@@ -45,7 +46,7 @@ public class Inicio extends JFrame implements ActionListener {
 		setForeground(new Color(255, 165, 0));
 		setBackground(new Color(0, 128, 0));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 548, 359);
+		setBounds(100, 100, 571, 359);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(224, 255, 255));
@@ -82,7 +83,7 @@ public class Inicio extends JFrame implements ActionListener {
 		JSeparator separator = new JSeparator();
 		separator.setBackground(new Color(255, 0, 0));
 		separator.setForeground(new Color(128, 128, 128));
-		separator.setBounds(41, 155, 454, 20);
+		separator.setBounds(41, 155, 480, 20);
 		contentPane.add(separator);
 		
 		JLabel lblEtiquetas = new JLabel("Etiquetas");
@@ -100,17 +101,16 @@ public class Inicio extends JFrame implements ActionListener {
 		
 		lblTexto.setForeground(new Color(127, 255, 0));
 		lblTexto.setFont(new Font("SimHei", Font.BOLD, 28));
-		lblTexto.setBounds(25, 197, 109, 45);
+		lblTexto.setBounds(12, 187, 109, 45);
 		contentPane.add(lblTexto);
 		
-		txtHola = new JTextField();
 		txtHola.setBackground(new Color(47, 79, 79));
 		txtHola.setForeground(new Color(255, 255, 0));
-		txtHola.setFont(new Font("SimHei", Font.BOLD, 20));
+		txtHola.setFont(new Font("SimHei", Font.BOLD, 18));
 		txtHola.setEditable(false);
-		txtHola.setBounds(123, 205, 372, 37);
+		txtHola.setBounds(122, 197, 398, 54);
 		contentPane.add(txtHola);
-		txtHola.setColumns(10);
+		//txtHola.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Aceptar");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -130,7 +130,7 @@ public class Inicio extends JFrame implements ActionListener {
 		});
 		btnNewButton.setForeground(new Color(139, 0, 0));
 		btnNewButton.setFont(new Font("SimHei", Font.BOLD, 20));
-		btnNewButton.setBounds(362, 105, 133, 39);
+		btnNewButton.setBounds(388, 103, 133, 39);
 		contentPane.add(btnNewButton);
 		
 		btnRegresar.addActionListener(new ActionListener() {
@@ -143,21 +143,20 @@ public class Inicio extends JFrame implements ActionListener {
 		});
 		btnRegresar.setForeground(new Color(128, 0, 0));
 		btnRegresar.setFont(new Font("SimHei", Font.PLAIN, 18));
-		btnRegresar.setBounds(358, 258, 120, 23);
+		btnRegresar.setBounds(401, 258, 120, 23);
 		btnRegresar.setVisible(false);
-		
-		
 		contentPane.add(btnRegresar);
+		
+		
 		txtpnPa.setFont(new Font("SimHei", Font.BOLD, 18));
 		txtpnPa.setForeground(new Color(47, 79, 79));
 		txtpnPa.setEditable(false);
 		txtpnPa.setText("Curso: Lenguajes Formales de Programacion\r\nNombre: "
 				+ "Paula Mar\u00EDa V\u00E1squez Cifuentes\r\nCarnet: 201314745\r\nFecha de Entrega: 16 de Diciembre, 2014\r\n");
 		txtpnPa.setBackground(new Color(224, 255, 255));
-		
-		txtpnPa.setBounds(35, 170, 460, 111);
-		 contentPane.add(txtpnPa);
-		 txtpnPa.setVisible(false);
+		txtpnPa.setBounds(35, 170, 486, 111);
+		contentPane.add(txtpnPa);
+		txtpnPa.setVisible(false);
 		
 		
 	}
