@@ -36,6 +36,7 @@ public class LecturaArchivo {
 					AL.analizador(AL.tipoToken(c), c, fila, columna);
 				}	
 			}
+			System.out.println(AL.error);
 			
 			
 			
