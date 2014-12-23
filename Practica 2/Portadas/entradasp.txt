@@ -1,0 +1,156 @@
+<XML>
+<Album>
+<Autor>
+Viernes Verde
+</Autor>
+<Titulo>
+Remedios para el Alma
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+Remedios.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+Viernes Verde
+</Autor>
+<Titulo>
+Oscuro
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+Oscuro.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+Viernes Verde
+</Autor>
+<Titulo>
+Con Piedras Palos y Flores
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+Flores.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+Viernes Verde
+</Autor>
+<Titulo>
+Fantasia Funesta
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+Fantasia.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+Viernes Verde
+</Autor>
+<Titulo>
+Cenizas bajo tus pies
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+cenizas.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+La Tona
+</Autor>
+<Titulo>
+El Rebotante
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+rebotante.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+La Tona
+</Autor>
+<Titulo>
+El Mito de Jade
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+mito.png
+</Portada>
+</Album>
+<Album>
+<Autor>
+Razones de Cambio
+</Autor>
+<Titulo>
+Yo...El Silencioso Dilema del Espejo
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+silencioso.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+Razones de Cambio
+</Autor>
+<Titulo>
+Aurora
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+aurora.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+Radio Viejo
+</Autor>
+<Titulo>
+Feria Paraiso
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+feria.jpg
+</Portada>
+</Album>
+<Album>
+<Autor>
+Radio Viejo
+</Autor>
+<Titulo>
+Claroscuro
+</Titulo>
+<Formato>
+Mp3
+</Formato>
+<Portada>
+claroscuro.jpg
+</Portada>
+</Album>
+</XML>

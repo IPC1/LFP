@@ -53,23 +53,27 @@ public class AnalizadorLexico {
 					if (albumb==true){//se abrio album
 						if(autorb==true){
 							Album.get((Album.size())-1).setAutor(palabra);//si es autor, lo guardo.
+							
 							palabra=null;//borro la palabra
 							etiqueta=true;//siempre para indicar que se abre una etiqueta
 						}else if(titulob==true){
 							Album.get((Album.size())-1).setTitulo(palabra);
+							
 							palabra=null;
 							etiqueta=true;
 						}else if(formatob==true){
 							Album.get((Album.size())-1).setFormato(palabra);
+							
 							palabra=null;
 							etiqueta=true;
 						}else if (portadab==true){
 							Album.get((Album.size())-1).setPortada(palabra);
+							
 							palabra=null;
 							etiqueta=true;
 						}else{//si ninguna es true, hay texto entre la ultima etiqueta y antes de cerrar el album.
 							if(albumb==true){
-								System.out.print("albumb no cerro");
+
 							}
 							error+="Error sintactico1 en la linea: "+fila+" por caracteres fuera de lugar"+caracter+"\n";
 						}
@@ -79,6 +83,7 @@ public class AnalizadorLexico {
 				}else{//xml esta cerrado. Hay texto despues del cierre de xml.
 					error+="Error sintactico3 en la linea: "+fila+". No se ha abierto la etiqueta XML. Caracteres fuera de lugar: "+caracter+"\n";
 				}
+				
 			}else if(bandera==true){//hay un error desde la primera etiqueta.
 				palabra=null;//no guardo el texto, puesto que hay error.
 				etiqueta=true;//abro una etiqueta.
@@ -112,6 +117,7 @@ public class AnalizadorLexico {
 					formatob=true;
 				}else if ((palabra.equalsIgnoreCase("Portada"))&&(portadab==false)){
 					portadab=true;
+				
 				}else{
 					error+="Palabra no permitida en etiqueta de apertura. Linea"+fila;
 				}
@@ -123,6 +129,7 @@ public class AnalizadorLexico {
 						portadab=false;
 					}else if ((palabra.equalsIgnoreCase("Formato"))&&(formatob==true)){
 						formatob=false;
+						
 					}else if ((palabra.equalsIgnoreCase("Titulo"))&&(titulob==true)){
 						titulob=false;
 					}else if((palabra.equalsIgnoreCase("Autor"))&&(autorb==true)){
@@ -137,6 +144,7 @@ public class AnalizadorLexico {
 					}
 					etiqueta=false;
 					palabra=null;
+		
 				}
 			}else if((etiqueta==false)){
 				if (palabra==null){
@@ -220,13 +228,16 @@ public class AnalizadorLexico {
 				banderadiag=true;
 			}
 			break;
-		case 6:
+		case 6://simbolos
 			if(!(etiqueta==true)){
 				if (palabra==null){
 					palabra=""+caracter;
 				}else{
 				palabra+=caracter;
 				}
+			}else if(etiqueta==true){
+				error+="Error lexico en la linea: "+fila+", posicion: "+columna+", simbolo: "+caracter+"\n";
+				bandera=true;
 			}
 			break;
 		}

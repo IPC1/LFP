@@ -30,6 +30,7 @@ public class LecturaArchivo {
 			AnalizadorLexico AL= new AnalizadorLexico();
 			while((linea=br.readLine())!=null){
 				fila++;
+				columna=0;
 				for (int i=0; i<linea.length();i++){
 					columna++;
 					char c= linea.charAt(i);
@@ -38,13 +39,17 @@ public class LecturaArchivo {
 			}
 			if(AL.bandera==true){
 				AL.Album.clear();
-				System.out.println("Error el las etiquetas xml");
+				AL.error+=" Error en la etiqueta de salida xml";
+			}	
+			System.out.println(AL.error);
+			if((AL.error)!=""){
+				JOptionPane.showMessageDialog(null, AL.error);
 			}
-			System.out.println(AL.error);			
 			
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Hay error el la lectura del archivo");
 		}
+		
 	}
 	
 	public void cerrarArchivo (){

@@ -6,11 +6,11 @@ Viernes Verde
 <Titulo>
 Remedios para el Alma
 </Titulo>
-<formato>
+<Formato>
 Mp3
 </Formato>
 <Portada>
 Remedios.jpg
-</portada>
+</Portada>
 </Album>
 </xml>
