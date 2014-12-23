@@ -1,4 +1,4 @@
-<XM8L>
+<XML>
 <Album>
 <Autor>
 Viernes Verde

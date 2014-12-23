@@ -36,9 +36,11 @@ public class LecturaArchivo {
 					AL.analizador(AL.tipoToken(c), c, fila, columna);
 				}	
 			}
-			System.out.println(AL.error);
-			
-			
+			if(AL.bandera==true){
+				AL.Album.clear();
+				System.out.println("Error el las etiquetas xml");
+			}
+			System.out.println(AL.error);			
 			
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Hay error el la lectura del archivo");
