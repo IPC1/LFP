@@ -41,10 +41,11 @@ public class Frame extends JFrame implements ActionListener{
 	JScrollPane scroll = new JScrollPane (textPane);
 	JLabel lblAutorOAlbum = new JLabel("AUTOR O ALBUM");
 	JLabel imagen = new JLabel();
+	private final JLabel lblImagen = new JLabel("imagen");
 	
 	public Frame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 675, 440);
+		setBounds(100, 100, 675, 622);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(224, 255, 255));
@@ -87,8 +88,9 @@ public class Frame extends JFrame implements ActionListener{
 		btnBuscar.setBounds(516, 101, 111, 37);
 		contentPane.add(btnBuscar);
 		
-		imagen.setHorizontalAlignment(SwingConstants.CENTER);
-		imagen.setIcon(new ImageIcon(getClass().getResource("/imagenes/Recepcion.jpg")));
+		lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
+		lblImagen.setIcon(null);
+
 		contentPane.add(imagen);
 		textPane.setFont(new Font("Tekton Pro", Font.PLAIN, 18));
 		textPane.setEditable(false);
@@ -116,6 +118,9 @@ public class Frame extends JFrame implements ActionListener{
 		lblAutorOAlbum.setBounds(36, 101, 470, 37);
 		
 		contentPane.add(lblAutorOAlbum);
+		lblImagen.setBounds(184, 362, 281, 190);
+		
+		contentPane.add(lblImagen);
 		
 	}
 
@@ -195,11 +200,16 @@ public class Frame extends JFrame implements ActionListener{
 				 textPane.setText("");
 				 texto="";
 				 for(int i=0; i<AnalizadorLexico.Album.size();i++){
+					 lblImagen.setIcon(null);
+					 String ruta ="";
 					 if (AnalizadorLexico.Album.get(i).getAutor().equalsIgnoreCase(autor)){
 						 texto+="Album: "+AnalizadorLexico.Album.get(i).getTitulo()+"\n"+
 								 "Formato: "+AnalizadorLexico.Album.get(i).getFormato()+"\n"+
 								 "Ruta de Portada: C:\\Users\\Pau!\\Documents\\GitHub\\LFP\\Practica 2\\Practica2L\\src\\Imagenes\\"+
 								 AnalizadorLexico.Album.get(i).getPortada()+"\n"+"\n";
+						 ruta="C:\\Users\\Pau!\\Documents\\GitHub\\LFP\\Practica 2\\Practica2L\\src\\Imagenes\\"+
+								 AnalizadorLexico.Album.get(i).getPortada();
+						 //lblImagen.setIcon(new ImageIcon(getClass().getResource(ruta)));
 					 }else{
 						 texto=texto;
 					 }
