@@ -1,5 +1,4 @@
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -16,24 +15,29 @@ import java.awt.event.ActionListener;
 
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JList;
+
 import java.awt.Color;
+import java.util.ArrayList;
 
 
 public class Principal extends JFrame implements ActionListener{
 
+	private ArrayList <String> Autor = new ArrayList <String>();
+	private ArrayList <String> Titulo = new ArrayList <String> ();
+	private ArrayList <String> canciones = new ArrayList <String>();
+	
 	private PanelImagen contentPane;
-	private JComboBox cBAutor;
-	private JComboBox cBTitulo;
+	private JComboBox<String> cBAutor;
+	private JComboBox<String> cBTitulo;
 	private JButton btnBuscar;
 	private JButton btnAnterior;
 	private JButton btnSiguiente;
 	
 	private JLabel lblMusica;
 	private JTextField txtFormato;
-	private JList list;
+	private JList<String> list;
 	private JTextField txtAutor;
 	private JTextField txtTitulo;
 	private JButton btnPause;
@@ -78,13 +82,13 @@ public class Principal extends JFrame implements ActionListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		cBTitulo = new JComboBox();
+		cBTitulo = new JComboBox<String>();
 		cBTitulo.setForeground(new Color(102, 0, 0));
 		cBTitulo.setFont(new Font("Tekton Pro", Font.PLAIN, 20));
 		cBTitulo.setBounds(47, 96, 264, 22);
 		contentPane.add(cBTitulo);
 		
-		cBAutor = new JComboBox();
+		cBAutor = new JComboBox<String>();
 		cBAutor.setForeground(new Color(102, 0, 0));
 		cBAutor.setFont(new Font("Tekton Pro", Font.PLAIN, 20));
 		cBAutor.setBounds(351, 96, 264, 22);
@@ -166,7 +170,7 @@ public class Principal extends JFrame implements ActionListener{
 		lblCanciones.setBounds(76, 306, 97, 16);
 		contentPane.add(lblCanciones);
 		
-		list = new JList();
+		list = new JList<String>();
 		list.setForeground(new Color(102, 0, 0));
 		list.setFont(new Font("Tekton Pro Cond", Font.PLAIN, 20));
 		list.setBounds(176, 305, 245, 76);
@@ -218,19 +222,68 @@ public class Principal extends JFrame implements ActionListener{
 		txtAlbumes.setColumns(10);
 	}
 
+	public void LlenarAutores(){
+		String autor="";
+		Autor.add("Vacio");
+		for (int i=0; i<Lexico.Album.size();i++){
+			autor= (Lexico.Album.get(i).getAutor());
+			if(!(Autor.contains(autor))){
+			Autor.add(autor);
+			}
+		}
+		
+	}
+	
+	public void LlenarTitulo(){
+		String autor="";
+		Titulo.add("Vacio");
+		for (int i=0; i<Lexico.Album.size();i++){
+			autor= (Lexico.Album.get(i).getTitulo());
+			if(!(Titulo.contains(autor))){
+			Titulo.add(autor);
+			}
+		}
+		
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		 if (e.getSource()== mntmAbrir){
+			 if (Titulo.size()>0){//limpia el array de albums
+				 Lexico.Album.clear();
+				 cBAutor.removeAllItems();
+			     cBTitulo.removeAllItems();
+				 Titulo.clear();
+				 Autor.clear();
+				 ALexico.error="";
+			 }
+			 
 			 int nose =fileC.showOpenDialog(mntmAbrir);
 			 if(nose == fileC.APPROVE_OPTION){
 				 String direccion= fileC.getSelectedFile().getAbsolutePath();
-			 
+				 Lectura l = new Lectura ();
+				 l.abrirArchivo(direccion);
+				 l.leer();
+				 l.cerrarArchivo();
 			 }else if(nose== fileC.CANCEL_OPTION){
 				 JOptionPane.showMessageDialog(null, "Ha decidido cancelar la operacion");
 			 }else if (nose== fileC.ERROR_OPTION){
 				 JOptionPane.showMessageDialog(null, "Hubo un error al abrir archivo");
 			 }
+			 LlenarAutores();
+			 LlenarTitulo();
+			 String item="";
+			 int i=0;
+			 for(i=0; i<Autor.size();i++){
+				 item = Autor.get(i);
+				 cBAutor.addItem(item);
+			 }
+			 for(i=0;i<Titulo.size();i++){
+				 item=Titulo.get(i);
+				 cBTitulo.addItem(item);
+			 }
+		 }else if(e.getSource()==btnBuscar){
 			 
 		 }
 	}

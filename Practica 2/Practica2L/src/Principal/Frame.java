@@ -158,6 +158,7 @@ public class Frame extends JFrame implements ActionListener{
 				 comboBox_1.removeAllItems();
 				 Titulo.clear();
 				 Autor.clear();
+				 AnalizadorLexico.error="";
 			 }
 			 
 			 int nose =fileC.showOpenDialog(mntmAbrir);
@@ -185,6 +186,8 @@ public class Frame extends JFrame implements ActionListener{
 				 item=Titulo.get(i);
 				 comboBox.addItem(item);
 			 }
+			 
+			 
 			 
 		 }else if(e.getSource()==btnBuscar){
 			 

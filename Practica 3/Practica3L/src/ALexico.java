@@ -1,10 +1,7 @@
-package Principal;
-
 import java.util.ArrayList;
 
-public class AnalizadorLexico {
-	
-	static ArrayList <Album> Album = new ArrayList <Album>();
+public class ALexico {
+static ArrayList <Album> Album = new ArrayList <Album>();
 	
 	boolean xmlb=false;
 	boolean albumb=false;
