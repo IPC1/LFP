@@ -24,6 +24,7 @@ private boolean otrose=false;
 private String palabra= null;
 
 public void analizador (int tokenActual, char caracter, int fila, int columna){
+	
 if(xmle==false){
 	switch (tokenActual){
 //es un menor que	

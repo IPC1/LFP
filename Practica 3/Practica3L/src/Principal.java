@@ -1,5 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
@@ -21,12 +22,17 @@ import javax.swing.JList;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+
 
 public class Principal extends JFrame implements ActionListener{
 
 	private ArrayList <String> Autor = new ArrayList <String>();
 	private ArrayList <String> Titulo = new ArrayList <String> ();
 	private ArrayList <String> canciones = new ArrayList <String>();
+	private ArrayList <Album> temp = new ArrayList <Album>();
+	private Musica reproductor = new Musica();
 	
 	private PanelImagen contentPane;
 	private JComboBox<String> cBAutor;
@@ -37,7 +43,8 @@ public class Principal extends JFrame implements ActionListener{
 	
 	private JLabel lblMusica;
 	private JTextField txtFormato;
-	private JList<String> list;
+	private JList list;
+	private DefaultListModel listModel = new DefaultListModel();
 	private JTextField txtAutor;
 	private JTextField txtTitulo;
 	private JButton btnPause;
@@ -102,6 +109,7 @@ public class Principal extends JFrame implements ActionListener{
 		contentPane.add(lblLibreriaDeMusica);
 		
 		btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(this);
 		btnBuscar.setBackground(new Color(255, 255, 255));
 		btnBuscar.setForeground(new Color(153, 0, 102));
 		btnBuscar.setFont(new Font("Tekton Pro", Font.PLAIN, 20));
@@ -118,7 +126,7 @@ public class Principal extends JFrame implements ActionListener{
 		lblAutor.setBounds(350, 69, 71, 25);
 		contentPane.add(lblAutor);
 		
-		JLabel lblImagen = new JLabel("");
+		lblImagen= new JLabel ();
 		lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
 		lblImagen.setBounds(438, 212, 150, 123);
 		contentPane.add(lblImagen);
@@ -169,20 +177,26 @@ public class Principal extends JFrame implements ActionListener{
 		lblCanciones.setFont(new Font("Tekton Pro", Font.PLAIN, 20));
 		lblCanciones.setBounds(76, 306, 97, 16);
 		contentPane.add(lblCanciones);
-		
-		list = new JList<String>();
+		list = new JList(listModel);
 		list.setForeground(new Color(102, 0, 0));
 		list.setFont(new Font("Tekton Pro Cond", Font.PLAIN, 20));
 		list.setBounds(176, 305, 245, 76);
-		contentPane.add(list);
+		//contentPane.add(list);
+		
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setBounds(176, 305, 245, 76);
+		contentPane.add(scrollPane);
+		//scrollPane.getViewport().setView(list);
 		
 		JButton btnSiguiente = new JButton("");
+		btnSiguiente.addActionListener(this);
 		btnSiguiente.setBackground(new Color(255, 255, 255));
 		btnSiguiente.setBounds(350, 425, 62, 59);
 		btnSiguiente.setIcon(new ImageIcon(getClass().getResource("/Imagenes/siguiente.png")));
 		contentPane.add(btnSiguiente);
 		
 		JButton btnAnterior = new JButton("");
+		btnAnterior.addActionListener(this);
 		btnAnterior.setForeground(Color.WHITE);
 		btnAnterior.setBackground(new Color(255, 255, 255));
 		btnAnterior.setIcon(new ImageIcon(getClass().getResource("/Imagenes/anterior.png")));
@@ -190,6 +204,25 @@ public class Principal extends JFrame implements ActionListener{
 		contentPane.add(btnAnterior);
 		
 		JButton btnPlay = new JButton("");
+		btnPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cancion=(String) listModel.getElementAt(list.getSelectedIndex());
+				String ruta= getClass().getResource("/Imagenes/"+cancion).toString();
+				System.out.println(ruta);
+				try {
+					reproductor.AbrirFichero("/Imagenes/"+ruta);
+				} catch (Exception e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				try {
+					reproductor.Play();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error al reproducir");
+				}
+			}
+		});
 		btnPlay.setForeground(new Color(189, 183, 107));
 		btnPlay.setBackground(new Color(255, 255, 255));
 		btnPlay.setIcon(new ImageIcon(getClass().getResource("/Imagenes/play.png")));
@@ -197,6 +230,11 @@ public class Principal extends JFrame implements ActionListener{
 		contentPane.add(btnPlay);
 		
 		JButton btnPause = new JButton("");
+		btnPause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnPause.setForeground(new Color(189, 183, 107));
 		btnPause.setBackground(new Color(255, 255, 255));
 		btnPause.setIcon(new ImageIcon(getClass().getResource("/Imagenes/pause.png")));
@@ -249,6 +287,8 @@ public class Principal extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		int i=0;
+		String titulo, autor;
 		 if (e.getSource()== mntmAbrir){
 			 if (Titulo.size()>0){//limpia el array de albums
 				 Lexico.Album.clear();
@@ -260,12 +300,14 @@ public class Principal extends JFrame implements ActionListener{
 			 }
 			 
 			 int nose =fileC.showOpenDialog(mntmAbrir);
+			
 			 if(nose == fileC.APPROVE_OPTION){
 				 String direccion= fileC.getSelectedFile().getAbsolutePath();
 				 Lectura l = new Lectura ();
 				 l.abrirArchivo(direccion);
 				 l.leer();
 				 l.cerrarArchivo();
+					
 			 }else if(nose== fileC.CANCEL_OPTION){
 				 JOptionPane.showMessageDialog(null, "Ha decidido cancelar la operacion");
 			 }else if (nose== fileC.ERROR_OPTION){
@@ -274,7 +316,7 @@ public class Principal extends JFrame implements ActionListener{
 			 LlenarAutores();
 			 LlenarTitulo();
 			 String item="";
-			 int i=0;
+			 
 			 for(i=0; i<Autor.size();i++){
 				 item = Autor.get(i);
 				 cBAutor.addItem(item);
@@ -285,6 +327,98 @@ public class Principal extends JFrame implements ActionListener{
 			 }
 		 }else if(e.getSource()==btnBuscar){
 			 
+			 String texto="";
+			 Album tem;
+			 temp.clear();
+			 titulo= (String) cBTitulo.getSelectedItem();
+			 autor= (String) cBAutor.getSelectedItem();
+			 if((titulo.equalsIgnoreCase("vacio")&&autor.equalsIgnoreCase("vacio"))||
+					 (!(titulo.equalsIgnoreCase("vacio"))&&!(autor.equalsIgnoreCase("vacio")))){
+				 JOptionPane.showMessageDialog(null, "Debe seleccionar solamente un autor o un titulo.\nY el otro campo debe quedar en vacio");
+			 }else if(titulo.equalsIgnoreCase("vacio")){
+				for(i=0; i<Lexico.Album.size();i++){
+					if (Lexico.Album.get(i).getAutor().equalsIgnoreCase(autor)){
+						System.out.println(Lexico.Album.size());
+						tem=Lexico.Album.get(i);
+						temp.add(tem);
+					}
+				}
+				txtAlbumes.setText(""+temp.size());
+				txtTitulo.setText(temp.get(0).getTitulo());
+				txtAutor.setText(temp.get(0).getAutor());
+				txtFormato.setText(temp.get(0).getFormato());
+				lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(0).getPortada())));
+				canciones.clear();
+				canciones = temp.get(0).ObtenerCanciones();
+				for(i=0; i<canciones.size();i++){
+					listModel.addElement(canciones.get(i));
+				}
+				
+			 }else if(autor.equalsIgnoreCase("vacio")){
+				 for(i=0;i<Lexico.Album.size();i++){
+					 if(Lexico.Album.get(i).getTitulo().equalsIgnoreCase(titulo)){
+						 tem=Lexico.Album.get(i);
+						 temp.add(tem);
+					 }
+				 }
+				 txtAlbumes.setText(""+temp.size());
+				 txtTitulo.setText(temp.get(0).getTitulo());
+				 txtAutor.setText(temp.get(0).getAutor());
+				 txtFormato.setText(temp.get(0).getFormato());
+				 lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(0).getPortada())));
+				 canciones.clear();
+				 canciones = temp.get(0).ObtenerCanciones();
+				 for(i=0; i<canciones.size();i++){
+					 listModel.addElement(canciones.get(i));
+				 }
+			 }
+			 
+			 
+		 }else if(e.getSource()==btnSiguiente){
+			 canciones.clear();
+			 titulo= txtTitulo.getText();
+			 autor=txtAutor.getText();
+			 int cont=0;
+			 for(i=0;i<temp.size();i++){
+				 if(temp.get(i).getAutor().equalsIgnoreCase(autor)&&
+						 temp.get(i).getTitulo().equalsIgnoreCase(titulo)){
+					 break;
+				 }else{
+					 cont++;
+				 }
+			 }
+			 txtAlbumes.setText(""+temp.size());
+			 txtTitulo.setText(temp.get(cont+1).getTitulo());
+			 txtAutor.setText(temp.get(cont+1).getAutor());
+			 txtFormato.setText(temp.get(cont+1).getFormato());
+			 lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(cont+1).getPortada())));
+			 canciones = temp.get(cont+1).ObtenerCanciones();
+			 for(i=0; i<canciones.size();i++){
+				 listModel.addElement(canciones.get(i));
+			 }
+			 
+		 }else if(e.getSource()==btnAnterior){
+			 canciones.clear();
+			 titulo= txtTitulo.getText();
+			 autor=txtAutor.getText();
+			 int cont=0;
+			 for(i=0;i<temp.size();i++){
+				 if(temp.get(i).getAutor().equalsIgnoreCase(autor)&&
+						 temp.get(i).getTitulo().equalsIgnoreCase(titulo)){
+					 break;
+				 }else{
+					 cont++;
+				 }
+			 }
+			 txtAlbumes.setText(""+temp.size());
+			 txtTitulo.setText(temp.get(cont-1).getTitulo());
+			 txtAutor.setText(temp.get(cont-1).getAutor());
+			 txtFormato.setText(temp.get(cont-1).getFormato());
+			 lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(cont-1).getPortada())));
+			 canciones = temp.get(cont-1).ObtenerCanciones();
+			 for(i=0; i<canciones.size();i++){
+				 listModel.addElement(canciones.get(i));
+			 }
 		 }
 	}
 }

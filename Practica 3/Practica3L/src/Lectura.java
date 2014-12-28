@@ -31,7 +31,7 @@ public class Lectura {
 			AL.setError("");
 			
 			while((linea=br.readLine())!=null){
-				System.out.println("Pase por aqui");
+			
 				fila++;
 				columna=0;
 				for (int i=0; i<linea.length();i++){
