@@ -27,27 +27,23 @@ public class Lectura {
 			int fila=0;
 			int columna=0;
 			Lexico AL= new Lexico();
-			AL.error="";
+			Tokens t= new Tokens();
+			AL.setError("");
+			
 			while((linea=br.readLine())!=null){
+				System.out.println("Pase por aqui");
 				fila++;
 				columna=0;
 				for (int i=0; i<linea.length();i++){
 					columna++;
 					char c= linea.charAt(i);
-					AL.analizador(AL.tipoToken(c), c, fila, columna);
+					AL.analizador(t.tipoToken(c), c, fila, columna);
 				}	
 			}
-			if((AL.bandera==true)){
-				System.out.println("entre aqui");
-				AL.error+=" Error en la etiqueta de cierre xml";
-			}else if((AL.inicio==true)){
-				
-				AL.Album.clear();
-				AL.error+=" Error en la etiqueta de apertura xml";
-			}
-			System.out.println(AL.error);
-			if((AL.error)!=""){
-				JOptionPane.showMessageDialog(null, AL.error);
+			
+			System.out.println(AL.getError());
+			if((AL.getError())!=""){
+				JOptionPane.showMessageDialog(null, AL.getError());
 			}
 			
 		}catch (Exception e){

@@ -256,7 +256,7 @@ public class Principal extends JFrame implements ActionListener{
 			     cBTitulo.removeAllItems();
 				 Titulo.clear();
 				 Autor.clear();
-				 ALexico.error="";
+				 
 			 }
 			 
 			 int nose =fileC.showOpenDialog(mntmAbrir);
