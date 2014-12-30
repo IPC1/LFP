@@ -37,7 +37,10 @@ public class LecturaArchivo {
 					AL.analizador(AL.tipoToken(c), c, fila, columna);
 				}	
 			}
-			
+			if((AL.bandera==true)|| (AL.inicio==true)){
+				AL.Album.clear();
+				AL.error+=" Error en la etiqueta de salida xml";
+			}	
 			System.out.println(AL.error);
 			if((AL.error)!=""){
 				JOptionPane.showMessageDialog(null, AL.error);
