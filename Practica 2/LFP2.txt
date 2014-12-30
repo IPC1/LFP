@@ -1,6 +1,6 @@
 <XML>
 <Album>
-<Autor>
+<8Autor>
 Viernes Verde
 </Autor>
 <Titulo>
