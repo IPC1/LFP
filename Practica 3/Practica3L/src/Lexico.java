@@ -20,6 +20,7 @@ private boolean banderadiag=false;
 private boolean xmle=false;
 private boolean albume=false;
 private boolean otrose=false;
+private boolean palabrae=false;
 
 private String palabra= null;
 
@@ -32,6 +33,7 @@ if(xmle==false){
 //CASO1: 
 		if ((palabra==null)&&(etiqueta==false)){//va a empezar a leer una etiqueta
 			etiqueta=true;
+			System.out.println(palabrae);
 //CASO2
 		}else if((palabra==null)&&(etiqueta==true)){//error lexico en etiqueta
 			bandera=true;
@@ -79,6 +81,7 @@ if(xmle==false){
 								}
 							}else if(otrose==true){
 								palabra=null;
+								etiqueta=true;
 								otrose=false;
 							}
 						}else if(albumb==false){//solo xml esta abierto, caracteres entre etiquetas, no leo el archivo porque hay error en xml.
@@ -105,24 +108,35 @@ if(xmle==false){
 //es una letra		
 	case 2:
 		if (palabra==null){//palabra nueva
+			
 			palabra=""+caracter;
 		}else{//solo concatena.
+			System.out.println(palabra);
 		palabra+=caracter;
 		}
+		System.out.println(palabra);
 		break;
 //es un mayor que	
 	case 3:
 //CASO1:
+		System.out.println(palabra);
 		//termina de leer la primer etiqueta, "sin" errores.
 		if ( (etiqueta==true)&&(bandera==false)&&(banderadiag==false)){
 			switch(to.tipoToken(palabra)){
 			case 1: //palabra es xml
 				if (xmlb==false){
 					xmlb=true;
+					
 				}else if(xmlb==true){
 					error+="Falta diagonal en etiqueta de cierre de XML. Fila"+fila+"\n";
 					 Album.clear();//hay error en xml, no se lee nada.
 					 xmlb=false;
+					 if(palabrae==true){//la palabra de cierre de album si venia dañada...
+							error+="Palabra equivocada en etiqueta de cierre Album. Fila"+(fila-2)+"\n";
+							Album.remove(Album.size()-1);
+							albumb=false;
+							palabrae=false;
+					 }
 				}
 				palabra=null;
 				etiqueta=false;
@@ -130,7 +144,7 @@ if(xmle==false){
 			case 2://palabra es album
 				if (xmlb==true){
 					if (albumb==false){
-						if(albume==false){
+						if(albume==false){//la primera palabra de album viene dañada.
 							Album temp = new Album("Desconocido","Desconocido","Desconocido","Desconocido.jpg");
 							Album.add(temp);
 							albumb=true;
@@ -141,6 +155,10 @@ if(xmle==false){
 						error+="Falta diagonal en etiqueta de cierre de Album. Fila"+fila+"\n";
 						Album.remove(Album.size()-1);//elimino el album que ya cree, por el error
 						albumb=false;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, hay una etiqueta de más.
+							error+="Etiqueta de más. Fila "+(fila-2)+"\n";
+							palabrae=false;
+					 }
 					}
 				}else if(xmlb==false){
 					error+="Debe abrir etiqueta XML, antes de etiqueta Album. Fila"+fila+"\n";
@@ -153,10 +171,22 @@ if(xmle==false){
 				if (albumb==true){
 					if (autorb==false){
 						autorb=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de autor de inicio viene dañada.
+							error+="Etiqueta de apertura en autor, palabra no permitida. Fila"+(fila-2)+"\n";
+							autorb=false;
+							palabrae=false;
+						}
 					}else if(autorb==true){
 						error+="Falta diagonal en etiqueta de cierre de Autor. Fila"+fila+"\n";
 						Album.get(Album.size()-1).setAutor("Desconocido");
 						autorb=false;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//hay una etiqueta de mas.
+							error+="Etiqueta de más. Fila"+(fila-2)+"\n";
+							autorb=false;
+							palabrae=false;
+						}
 					}
 				}else if(albumb==false){
 					if(albume==false){
@@ -170,6 +200,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (titulob==false){
 						titulob=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de titulo de inicio viene dañada.
+							error+="Etiqueta de apertura en titulo, palabra no permitida. Fila"+(fila-2)+"\n";
+							error+="Falta diagonal en etiqueta de cierre de Titulo. Fila"+fila+"\n";
+							titulob=false;
+							palabrae=false;
+						}
 					}else if(titulob==true){
 						error+="Falta diagonal en etiqueta de cierre de Titulo. Fila"+fila+"\n";
 						Album.get(Album.size()-1).setTitulo("Desconocido");
@@ -187,6 +224,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (formatob==false){
 						formatob=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de formato de inicio viene dañada.
+							error+="Etiqueta de apertura en formato, palabra no permitida. Fila"+(fila-2)+"\n";
+							error+="Falta diagonal en etiqueta de cierre de Formato. Fila"+fila+"\n";
+							formatob=false;
+							palabrae=false;
+						}
 					}else if(formatob==true){
 						error+="Falta diagonal en etiqueta de cierre de Formato. Fila"+fila+"\n";
 						Album.get(Album.size()-1).setFormato("Desconocido");
@@ -204,6 +248,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (portadab==false){
 						portadab=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de portada de inicio viene dañada.
+							error+="Etiqueta de apertura en portada, palabra no permitida. Fila"+(fila-2)+"\n";
+							error+="Falta diagonal en etiqueta de cierre de Portadad. Fila"+fila+"\n";
+							portadab=false;
+							palabrae=false;
+						}
 					}else if(portadab==true){
 						error+="Falta diagonal en etiqueta de cierre de Portadad. Fila"+fila+"\n";
 						Album.get(Album.size()-1).setPortada("Desconocido.jpg");
@@ -221,6 +272,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (cancionesb==false){
 						cancionesb=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de canciones de inicio viene dañada.
+							error+="Etiqueta de apertura en canciones, palabra no permitida. Fila"+(fila-2)+"\n";
+							error+="Falta diagonal en etiqueta de cierre de Canciones. Fila"+fila+"\n";
+							cancionesb=false;
+							palabrae=false;
+						}
 					}else if(cancionesb==true){
 						error+="Falta diagonal en etiqueta de cierre de Canciones. Fila"+fila+"\n";
 						Album.get(Album.size()-1).LimpiarCanciones();;
@@ -235,16 +293,32 @@ if(xmle==false){
 				etiqueta=false;
 				break;
 			case 8: //palabra es pistas
+				
 				if (cancionesb==true){
 					if (pistasb==false){
-						System.out.println("pistas true");
 						pistasb=true;
-					}else if(pistasb==true){
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de pista de inicio viene dañada.
+							System.out.println("pistas true");
+							error+="Etiqueta de apertura en pistas, palabra no permitida. Fila"+(fila-2)+"\n";
+							error+="Falta diagonal en etiqueta de cierre de Pistas. Fila"+fila+"\n";
+							pistasb=false;
+							palabrae=false;
+						}
+					}else if(pistasb==true){System.out.println(palabrae+"pistas");
 						error+="Falta diagonal en etiqueta de cierre de Pistas. Fila"+fila+"\n";
 						Album.get(Album.size()-1).EliminarCanciones();;
 						pistasb=false;
 					}
 				}else if(cancionesb==false){
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de canciones de inicio viene dañada.
+						
+						error+="Etiqueta de apertura en canciones, palabra no permitida. Fila"+(fila-2)+"\n";
+						error+="Falta diagonal en etiqueta de cierre de Pistas. Fila"+fila+"\n";
+						cancionesb=false;
+						palabrae=false;
+					}
 					error+="Debe abrir etiqueta Canciones, antes de etiqueta Pistas. Fila"+fila+"\n";
 				}
 				palabra=null;
@@ -252,7 +326,12 @@ if(xmle==false){
 				break;
 			case 9: //palabra no esta permitida
 				//verificar si es etiqueta de cierre sin diagonal y mal escrita.
-				if (xmlb==true){
+				if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+					//la etiqueta de apertura y de fin viene dañada
+					error+="Etiqueta de apertura, palabra no permitida. Fila"+(fila-2)+"\n";
+					error+="Falta diagonal en etiqueta de cierre. Fila"+fila+"\n";
+					palabrae=false;
+				}else if (xmlb==true){
 					if (albumb==true){
 						if(autorb==true){//esta abierto autor
 							error+="Palabra equivocada en etiqueta de cierre Autor. Fila"+fila+"\n";
@@ -280,10 +359,10 @@ if(xmle==false){
 								Album.get((Album.size())-1).LimpiarCanciones();
 								cancionesb=false;
 							}
-						}else{//todas estan cerradas, error en cierre de album
-							error+="Palabra equivocada en etiqueta de cierre Album. Fila"+fila+"\n";
-							Album.remove(Album.size()-1);
-							albumb=false;
+						}else{//todas estan cerradas, se supone error en cierre de album
+							palabrae=true;
+							System.out.println("Pase palabrae true");
+							otrose=true;
 						}
 						
 					}else if(albumb==false){//no esta abierto album, error en cierre xml.
@@ -313,6 +392,12 @@ if(xmle==false){
 			case 1: //palabra es xml
 				if (xmlb==true){
 					xmlb=false;
+					if(palabrae==true){//la palabra de cierre de album si venia dañada...
+						error+="Palabra equivocada en etiqueta de cierre Album. Fila"+(fila-2)+"\n";
+						Album.remove(Album.size()-1);
+						albumb=false;
+						palabrae=false;
+				 }
 				}else if(xmlb==false){//no se ha abierto XML
 					error+="Diagonal en etiqueta de apertura XML. Fila"+fila+"\n";
 				}
@@ -323,6 +408,11 @@ if(xmle==false){
 			case 2: //palabra es album
 				if (albumb==true){
 					albumb=false;
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, hay una etiqueta de más.
+						error+="Etiqueta de más. Fila "+(fila-2)+"\n";
+						palabrae=false;
+				 }
+					
 				}else if (albumb==false){
 					if (albume==false){
 						error+="Diagonal en etiqueta de apertura Album. Fila"+fila+"\n";
@@ -336,9 +426,17 @@ if(xmle==false){
 				banderadiag=false;
 				break;
 			case 3: //palabra es autor
+				System.out.println("leí autor");
 				if (autorb==true){
 					autorb=false;
 				}else if (autorb==false){
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de autor de inicio viene dañada.
+						error+="Etiqueta de apertura en autor, palabra no permitida. Fila"+(fila-2)+"\n";
+						autorb=false;
+						palabrae=false;
+					}
+					System.out.println("etiqueta apertura autor");
 					error+="Diagonal en etiqueta de apertura Autor. Fila"+fila+"\n";
 				}
 				palabra=null;
@@ -350,6 +448,12 @@ if(xmle==false){
 					titulob=false;
 				}else if (titulob==false){
 					error+="Diagonal en etiqueta de apertura Titulo. Fila"+fila+"\n";
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de titulo de inicio viene dañada.
+						error+="Etiqueta de apertura en titulo, palabra no permitida. Fila"+(fila-2)+"\n";
+						titulob=false;
+						palabrae=false;
+					}
 				}
 				palabra=null;
 				etiqueta=false;
@@ -360,6 +464,12 @@ if(xmle==false){
 					formatob=false;
 				}else if (formatob==false){
 					error+="Diagonal en etiqueta de apertura Formato. Fila"+fila+"\n";
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de formato de inicio viene dañada.
+						error+="Etiqueta de apertura en formato, palabra no permitida. Fila"+(fila-2)+"\n";
+						formatob=false;
+						palabrae=false;
+					}
 				}
 				palabra=null;
 				etiqueta=false;
@@ -370,6 +480,12 @@ if(xmle==false){
 					portadab=false;
 				}else if (portadab==false){
 					error+="Diagonal en etiqueta de apertura Portada. Fila"+fila+"\n";
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de portada de inicio viene dañada.
+						error+="Etiqueta de apertura en portada, palabra no permitida. Fila"+(fila-2)+"\n";
+						portadab=false;
+						palabrae=false;
+					}
 				}
 				palabra=null;
 				etiqueta=false;
@@ -380,23 +496,53 @@ if(xmle==false){
 					cancionesb=false;
 				}else if (cancionesb==false){
 					error+="Diagonal en etiqueta de apertura Canciones. Fila"+fila+"\n";
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de canciones de inicio viene dañada.
+						error+="Etiqueta de apertura en canciones, palabra no permitida. Fila"+(fila-2)+"\n";
+						cancionesb=false;
+						palabrae=false;
+					}
 				}
 				palabra=null;
 				etiqueta=false;
 				banderadiag=false;
 				break;
 			case 8: //palabra es pistas
-				if (pistasb==true){
+				if(cancionesb==false){
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de canciones de inicio viene dañada.
+						error+="Etiqueta de apertura en canciones, palabra no permitida. Fila"+(fila-2)+"\n";
+						error+="Falta diagonal en etiqueta de cierre de Pistas. Fila"+fila+"\n";
+						cancionesb=false;
+						palabrae=false;
+					}
+					error+="Debe abrir etiqueta Canciones, antes de etiqueta Pistas. Fila"+fila+"\n";
+				}else if (cancionesb==true){
+					if (pistasb==true){
 					pistasb=false;
 				}else if (pistasb==false){
 					error+="Diagonal en etiqueta de apertura Pistas. Fila"+fila+"\n";
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de pistas de inicio viene dañada.
+						error+="Etiqueta de apertura en pistas, palabra no permitida. Fila"+(fila-2)+"\n";
+						pistasb=false;
+						palabrae=false;
+					}
 				}
+				}
+				
 				palabra=null;
 				etiqueta=false;
 				banderadiag=false;
 				break;
 			case 9: //palabra no esta permitida
 				//verificar si es etiqueta de cierre mal escrita.
+				if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+					//la etiqueta de apertura viene dañada y la de cierre mal escrita.
+					error+="Etiqueta de apertura, palabra no permitida. Fila"+(fila-2)+"\n";
+					error+="Etiqueta de cierre mal escrita. Fila"+fila+"\n";
+					palabrae=false;
+				}else 
 				if (xmlb==true){
 					if (albumb==true){
 						if(autorb==true){//esta abierto autor
@@ -458,9 +604,16 @@ if(xmle==false){
 				if (xmlb==false){
 					xmle=true;//hay error en la etiqueta de apertura xml.
 				}else if(xmlb==true){
+					if(palabrae==true){//la palabra de cierre de album si venia dañada...
+						error+="Palabra equivocada en etiqueta de cierre Album. Fila"+(fila-2)+"\n";
+						Album.remove(Album.size()-1);
+						albumb=false;
+						palabrae=false;
+					}
 					error+="Falta diagonal en etiqueta de cierre de XML. Fila"+fila+"\n";
 					 Album.clear();//hay error en xml, no se lee nada.
 					 xmlb=false;
+					 
 				}
 				palabra=null;
 				etiqueta=false;
@@ -475,8 +628,12 @@ if(xmle==false){
 							albume=true;
 						}
 					}else if (albumb==true){//album esta abierto. Error en la etiqueta de cierre
-							error+="Falta diagonal en etiqueta de cierre de Album. Fila"+fila+"\n";
+						error+="Falta diagonal en etiqueta de cierre de Album. Fila"+fila+"\n";
 						Album.remove(Album.size()-1);//elimino el album que ya cree, por el error
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, hay una etiqueta de más.
+							error+="Etiqueta de más. Fila "+(fila-2)+"\n";
+							palabrae=false;
+						}
 					}
 				}else if(xmlb==false){
 					error+="Debe abrir etiqueta XML, antes de etiqueta Album. Fila"+fila+"\n";
@@ -489,6 +646,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (autorb==false){
 						otrose=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de Autor de inicio viene dañada.
+							error+="Etiqueta de apertura en Autor, palabra no permitida. Fila"+(fila-2)+"\n";
+							autorb=false;
+							palabrae=false;
+							otrose=false;
+						}
 					}else if(autorb==true){
 						error+="Falta diagonal en etiqueta de cierre de Autor. Fila"+fila+"\n";
 						Album.get(Album.size()-1).setAutor("Desconocido");
@@ -505,6 +669,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (titulob==false){
 						otrose=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de titulo de inicio viene dañada.
+							error+="Etiqueta de apertura en titulo, palabra no permitida. Fila"+(fila-2)+"\n";
+							titulob=false;
+							palabrae=false;
+							otrose=false;
+						}
 					}else if(titulob==true){
 						error+="Falta diagonal en etiqueta de cierre de Titulo. Fila"+fila+"\n";
 						Album.get(Album.size()-1).setTitulo("Desconocido");
@@ -521,6 +692,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (formatob==false){
 						otrose=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de Formato de inicio viene dañada.
+							error+="Etiqueta de apertura en Formato, palabra no permitida. Fila"+(fila-2)+"\n";
+							formatob=false;
+							palabrae=false;
+							otrose=false;
+						}
 					}else if(formatob==true){
 						error+="Falta diagonal en etiqueta de cierre de Formato. Fila"+fila+"\n";
 						Album.get(Album.size()-1).setFormato("Desconocido");
@@ -537,6 +715,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (portadab==false){
 						otrose=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de portada de inicio viene dañada.
+							error+="Etiqueta de apertura en Portada, palabra no permitida. Fila"+(fila-2)+"\n";
+							portadab=false;
+							palabrae=false;
+							otrose=false;
+						}
 					}else if(portadab==true){
 						error+="Falta diagonal en etiqueta de cierre de Portadad. Fila"+fila+"\n";
 						Album.get(Album.size()-1).setPortada("Desconocido.jpg");
@@ -552,6 +737,13 @@ if(xmle==false){
 				if (albumb==true){
 					if (cancionesb==false){
 						otrose=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de Canciones de inicio viene dañada.
+							error+="Etiqueta de apertura en Canciones, palabra no permitida. Fila"+(fila-2)+"\n";
+							cancionesb=false;
+							palabrae=false;
+							otrose=false;
+						}
 					}else if(cancionesb==true){
 						error+="Falta diagonal en etiqueta de cierre de Canciones. Fila"+fila+"\n";
 						Album.get(Album.size()-1).LimpiarCanciones();;
@@ -568,12 +760,26 @@ if(xmle==false){
 				if (cancionesb==true){
 					if (pistasb==false){
 						otrose=true;
+						if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+							//la etiqueta de Pistas de inicio viene dañada.
+							error+="Etiqueta de apertura en Pistas, palabra no permitida. Fila"+(fila-2)+"\n";
+							pistasb=false;
+							palabrae=false;
+							otrose=false;
+						}
 					}else if(pistasb==true){
 						error+="Falta diagonal en etiqueta de cierre de Pistas. Fila"+fila+"\n";
 						Album.get(Album.size()-1).EliminarCanciones();;
 						pistasb=false;
 					}
 				}else if(cancionesb==false){
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de canciones de inicio viene dañada.
+						error+="Etiqueta de apertura en canciones, palabra no permitida. Fila"+(fila-2)+"\n";
+						error+="Falta diagonal en etiqueta de cierre de Pistas. Fila"+fila+"\n";
+						cancionesb=false;
+						palabrae=false;
+					}
 					error+="Debe abrir etiqueta Canciones, antes de etiqueta Pistas. Fila"+fila+"\n";
 				}
 				palabra=null;
@@ -582,7 +788,12 @@ if(xmle==false){
 				break;
 			case 9: //palabra no esta permitida
 				//verificar si no es etiqueta de cierre mal escrita y sin diagonal.
-				if (xmlb==true){
+				if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+					//la etiqueta de apertura viene dañada y la de cierre mal escrita.
+					error+="Etiqueta de apertura, palabra no permitida. Fila"+(fila-2)+"\n";
+					error+="Etiqueta de cierre mal escrita. Fila"+fila+"\n";
+					palabrae=false;
+				}else if (xmlb==true){
 					if (albumb==true){
 						if(autorb==true){//esta abierto autor
 							error+="Palabra equivocada en etiqueta de cierre Autor. Fila"+fila+"\n";
@@ -643,6 +854,12 @@ if(xmle==false){
 				if(xmlb==true){//la segunda etiqueta tiene error
 					Album.clear();
 					xmlb=false;
+					if(palabrae==true){//la palabra de cierre de album si venia dañada...
+						error+="Palabra equivocada en etiqueta de cierre Album. Fila"+(fila-2)+"\n";
+						Album.remove(Album.size()-1);
+						albumb=false;
+						palabrae=false;
+				 }
 				}else if(xmlb==false){//es la primera con error
 					xmle=true;
 					error+="Diagonal en etiqueta de apertura XML. Fila"+fila+"\n";
@@ -656,6 +873,10 @@ if(xmle==false){
 				if(albumb==true){//la segunda etiqueta tiene error
 					Album.remove(Album.size()-1);
 					albumb=false;
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, hay una etiqueta de más.
+						error+="Etiqueta de más. Fila "+(fila-2)+"\n";
+						palabrae=false;
+					}
 				}else if(albumb==false){//es la primera con error
 					if(albume==true){
 						albume=false;
@@ -675,6 +896,13 @@ if(xmle==false){
 					autorb=false;
 				}else if(autorb==false){//es la primera con error
 					otrose=true;
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de Autor de inicio viene dañada.
+						error+="Etiqueta de apertura en Autor, palabra no permitida. Fila"+(fila-2)+"\n";
+						autorb=false;
+						palabrae=false;
+						otrose=false;
+					}
 					error+="Diagonal en etiqueta de apertura Autor. Fila"+fila+"\n";
 				}
 				palabra=null;
@@ -688,6 +916,13 @@ if(xmle==false){
 					titulob=false;
 				}else if(titulob==false){//es la primera con error
 					otrose=true;
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de Titulo de inicio viene dañada.
+						error+="Etiqueta de apertura en Titulo, palabra no permitida. Fila"+(fila-2)+"\n";
+						titulob=false;
+						palabrae=false;
+						otrose=false;
+					}
 					error+="Diagonal en etiqueta de apertura Titulo. Fila"+fila+"\n";
 				}
 				palabra=null;
@@ -701,6 +936,13 @@ if(xmle==false){
 					formatob=false;
 				}else if(formatob==false){//es la primera con error
 					otrose=true;
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de Formato de inicio viene dañada.
+						error+="Etiqueta de apertura en Formato, palabra no permitida. Fila"+(fila-2)+"\n";
+						formatob=false;
+						palabrae=false;
+						otrose=false;
+					}
 					error+="Diagonal en etiqueta de apertura Formato. Fila"+fila+"\n";
 				}
 				palabra=null;
@@ -714,6 +956,13 @@ if(xmle==false){
 					portadab=false;
 				}else if(portadab==false){//es la primera con error
 					otrose=true;
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de portada de inicio viene dañada.
+						error+="Etiqueta de apertura en portada, palabra no permitida. Fila"+(fila-2)+"\n";
+						portadab=false;
+						palabrae=false;
+						otrose=false;
+					}
 					error+="Diagonal en etiqueta de apertura Portada. Fila"+fila+"\n";
 				}
 				palabra=null;
@@ -727,6 +976,13 @@ if(xmle==false){
 					cancionesb=false;
 				}else if(cancionesb==false){//es la primera con error
 					otrose=true;
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de canciones de inicio viene dañada.
+						error+="Etiqueta de apertura en Canciones, palabra no permitida. Fila"+(fila-2)+"\n";
+						cancionesb=false;
+						palabrae=false;
+						otrose=false;
+					}
 					error+="Diagonal en etiqueta de apertura Canciones. Fila"+fila+"\n";
 				}
 				palabra=null;
@@ -735,13 +991,32 @@ if(xmle==false){
 				etiqueta=false;
 				break;
 			case 8: //palabra es pistas
-				if(pistasb==true){//la segunda etiqueta tiene error
+				if(cancionesb==false){
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de canciones de inicio viene dañada.
+						error+="Etiqueta de apertura en canciones, palabra no permitida. Fila"+(fila-2)+"\n";
+						error+="Falta diagonal en etiqueta de cierre de Pistas. Fila"+fila+"\n";
+						cancionesb=false;
+						palabrae=false;
+					}
+					error+="Debe abrir etiqueta Canciones, antes de etiqueta Pistas. Fila"+fila+"\n";
+				}else if(cancionesb==true){
+					if(pistasb==true){//la segunda etiqueta tiene error
 					Album.get(Album.size()-1).EliminarCanciones();
 					pistasb=false;
 				}else if(pistasb==false){//es la primera con error
 					otrose=true;
+					if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+						//la etiqueta de pistas de inicio viene dañada.
+						error+="Etiqueta de apertura en Pistas, palabra no permitida. Fila"+(fila-2)+"\n";
+						pistasb=false;
+						palabrae=false;
+						otrose=false;
+					}
 					error+="Diagonal en etiqueta de apertura Pistas. Fila"+fila+"\n";
 				}
+				}
+				
 				palabra=null;
 				bandera=false;
 				banderadiag=false;
@@ -749,7 +1024,12 @@ if(xmle==false){
 				break;
 			case 9: //palabra no esta permitida
 				//verificar si es el cierre mal escrito y sin diagonal.
-				if (xmlb==true){
+				if(palabrae==true){//la palabra de cierre de album no venia dañada, 
+					//la etiqueta de apertura viene dañada y la de cierre mal escrita.
+					error+="Etiqueta de apertura, palabra no permitida. Fila"+(fila-2)+"\n";
+					error+="Etiqueta de cierre mal escrita. Fila"+fila+"\n";
+					palabrae=false;
+				}else if (xmlb==true){
 					if (albumb==true){
 						if(autorb==true){//esta abierto autor
 							error+="Palabra equivocada en etiqueta de cierre Autor. Fila"+fila+"\n";
@@ -831,6 +1111,7 @@ if(xmle==false){
 			palabra+=caracter;
 			}
 		}else if (etiqueta==true){//palabra de una etiqueta
+			System.out.println("banderadiag true");
 			banderadiag=true;
 		}
 		break;

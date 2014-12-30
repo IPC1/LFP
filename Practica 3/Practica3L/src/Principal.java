@@ -20,10 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.JList;
 
 import java.awt.Color;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+
+import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 
 public class Principal extends JFrame implements ActionListener{
@@ -32,7 +36,6 @@ public class Principal extends JFrame implements ActionListener{
 	private ArrayList <String> Titulo = new ArrayList <String> ();
 	private ArrayList <String> canciones = new ArrayList <String>();
 	private ArrayList <Album> temp = new ArrayList <Album>();
-	private Musica reproductor = new Musica();
 	
 	private PanelImagen contentPane;
 	private JComboBox<String> cBAutor;
@@ -55,6 +58,12 @@ public class Principal extends JFrame implements ActionListener{
 	private JMenu mnInformacion;
 	private JFileChooser fileC= new JFileChooser();
 	private JTextField txtAlbumes;
+	
+	String seleccion="";
+	Musica titoga = new Musica();   
+	URL url;
+	File file;
+	boolean rep= false;
 	
 	public Principal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -206,21 +215,34 @@ public class Principal extends JFrame implements ActionListener{
 		JButton btnPlay = new JButton("");
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String cancion=(String) listModel.getElementAt(list.getSelectedIndex());
-				String ruta= getClass().getResource("/Imagenes/"+cancion).toString();
-				System.out.println(ruta);
+				if(rep==false&&file==null){
+					seleccion=(String) listModel.getElementAt(list.getSelectedIndex());
+				System.out.println(seleccion);
+				url = getClass().getResource("/Imagenes/"+seleccion);
+				file = new File(url.getPath());
+				System.out.print(url.getPath());
 				try {
-					reproductor.AbrirFichero("/Imagenes/"+ruta);
-				} catch (Exception e2) {
+					titoga.control.open(file);
+				} catch (BasicPlayerException e1) {
 					// TODO Auto-generated catch block
-					e2.printStackTrace();
+					e1.printStackTrace();
 				}
 				try {
-					reproductor.Play();
-				} catch (Exception e1) {
+					titoga.control.play();
+				} catch (BasicPlayerException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Error al reproducir");
 				}
+				rep=true;
+				}else if (rep=true){
+					try {
+						titoga.control.resume();
+					} catch (BasicPlayerException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
 			}
 		});
 		btnPlay.setForeground(new Color(189, 183, 107));
@@ -229,10 +251,30 @@ public class Principal extends JFrame implements ActionListener{
 		btnPlay.setBounds(488, 348, 36, 31);
 		contentPane.add(btnPlay);
 		
+		JButton btnStop = new JButton("");
+		btnStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					titoga.control.stop();
+				} catch (BasicPlayerException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnStop.setBounds(528, 348, 36, 33);
+		contentPane.add(btnStop);
+		btnStop.setIcon(new ImageIcon(getClass().getResource("/Imagenes/stop.png")));
+		
 		JButton btnPause = new JButton("");
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					titoga.control.pause();
+				} catch (BasicPlayerException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnPause.setForeground(new Color(189, 183, 107));
@@ -326,7 +368,7 @@ public class Principal extends JFrame implements ActionListener{
 				 cBTitulo.addItem(item);
 			 }
 		 }else if(e.getSource()==btnBuscar){
-			 
+			listModel.removeAllElements();
 			 String texto="";
 			 Album tem;
 			 temp.clear();

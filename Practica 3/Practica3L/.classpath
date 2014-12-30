@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="C:/Users/usuario/Documents/GitHub/LFP/Practica 3/BasicPlayer3.0/lib/mp3spi1.9.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/usuario/Documents/GitHub/LFP/Practica 3/BasicPlayer3.0/lib/tritonus_share.jar"/>
 	<classpathentry kind="lib" path="C:/Users/usuario/Documents/GitHub/LFP/Practica 3/BasicPlayer3.0/lib/vorbisspi1.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/usuario/Documents/GitHub/LFP/Practica 3/jl1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

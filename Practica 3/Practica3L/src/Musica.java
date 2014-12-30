@@ -1,51 +1,48 @@
-import javazoom.jlgui.basicplayer.BasicPlayer;
-import javazoom.jlgui.basicplayer.BasicPlayerException;
+import java.io.File; 
+import java.io.PrintStream; 
+import java.util.Map; 
+import javazoom.jlgui.basicplayer.*; 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
+public class Musica implements BasicPlayerListener{
+	 private PrintStream out = null;//Stream para el Debbugging(println)... 
+     BasicPlayer player = new BasicPlayer();//Instancia de BasicPlayer 
 
-public class Musica {
-private BasicPlayer player;
-String ruta ="";
-InputStream in;
-AudioStream audio;
-public Musica() {
-    player = new BasicPlayer();
-    
-   
-}
+	    public Musica() {//Constructor de la clase 
+	        player.addBasicPlayerListener(this);
 
-public void Play(){
-AudioPlayer.player.start(audio);
-}
+	        out = System.out; 
 
-public void AbrirFichero(String ruta) throws IOException{
-	this.ruta=ruta;
-in =new FileInputStream(ruta);
-audio = new AudioStream(in);
+	    } 
+	     
+	    BasicController control = (BasicController) player;//Controlador para player 
+	     
+	     
+	    //Metodos sobreescritos: 
 
-}
+	    public void opened(Object stream, Map properties) { 
 
-public void Pausa(){
-AudioPlayer.player.interrupt();
-}
+	        display("opened : " + properties.toString()); 
+	    } 
 
-public void Continuar() {
-	if(AudioPlayer.player.isInterrupted()){
-		AudioPlayer.player.run();
-	}
-}
+	    public void progress(int bytesread, long microseconds, byte[] pcmdata, Map properties) { 
+	       
+	        display("progress : " + properties.toString()); 
+	    } 
 
-public void Stop() {
-   
-}
+	    public void stateUpdated(BasicPlayerEvent event) { 
+	        display("stateUpdated : " + event.toString()); 
+	        
+	    } 
 
+	    public void setController(BasicController controller) { 
+	        display("setController : " + controller); 
+	    } 
+
+	    public void display(String msg) { 
+	        if (out != null) { 
+	            out.println(msg); 
+	        } 
+	    } 
 	
-
 }

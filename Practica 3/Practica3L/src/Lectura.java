@@ -22,12 +22,12 @@ public class Lectura {
 	}
 	
 	public void leer(){
+		Lexico AL= new Lexico();
+		Tokens t= new Tokens();
 		try{
 			String linea="";
 			int fila=0;
 			int columna=0;
-			Lexico AL= new Lexico();
-			Tokens t= new Tokens();
 			AL.setError("");
 			
 			while((linea=br.readLine())!=null){
@@ -41,13 +41,12 @@ public class Lectura {
 				}	
 			}
 			
-			System.out.println(AL.getError());
-			if((AL.getError())!=""){
-				JOptionPane.showMessageDialog(null, AL.getError());
-			}
-			
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Hay error el la lectura del archivo");
+		}
+		System.out.println(AL.getError());
+		if((AL.getError())!=""){
+			JOptionPane.showMessageDialog(null, AL.getError());
 		}
 		
 	}
