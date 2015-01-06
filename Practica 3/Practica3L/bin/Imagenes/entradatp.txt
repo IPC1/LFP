@@ -12,7 +12,6 @@ estadio.mp3
 </Pistas>
 <Pistas>
 invisible.mp3
-</Pistas>
 <Pistas>
 pantheraonca.mp3
 </Pistas>
