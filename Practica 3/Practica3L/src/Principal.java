@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
-import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 
 public class Principal extends JFrame implements ActionListener{
@@ -60,8 +59,8 @@ public class Principal extends JFrame implements ActionListener{
 	private JTextField txtAlbumes;
 	
 	String seleccion="";
-	Musica titoga = new Musica();   
-	URL url;
+	//Musica titoga = new Musica();   
+	String url;
 	File file;
 	boolean rep= false;
 	
@@ -216,31 +215,36 @@ public class Principal extends JFrame implements ActionListener{
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(rep==false&&file==null){
-					seleccion=(String) listModel.getElementAt(list.getSelectedIndex());
+					if(rep==false){
+						seleccion=(String) listModel.getElementAt(list.getSelectedIndex());
 				System.out.println(seleccion);
-				url = getClass().getResource("/Imagenes/"+seleccion);
-				file = new File(url.getPath());
-				System.out.print(url.getPath());
-				try {
-					titoga.control.open(file);
-				} catch (BasicPlayerException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				url = getClass().getResource("/Imagenes/"+seleccion).toString();
+				System.out.println("esta es la url: "+url);
+				System.out.print(url);
+				try{
+					//titoga.AbrirFichero("C:\\Users\\Pau!\\Documents\\GitHub\\LFP\\Practica 3\\Practica3L\\src\\Imagenes\\"+seleccion);
+					System.out.println("Encontre el archivo");
+				}catch(Exception e2){
+					
 				}
 				try {
-					titoga.control.play();
-				} catch (BasicPlayerException e1) {
+					//titoga.Play();
+					System.out.println("Estoy reproduciendo");
+					rep=true;
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				rep=true;
-				}else if (rep=true){
-					try {
-						titoga.control.resume();
-					} catch (BasicPlayerException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					}else{
+						try {
+							//titoga.Continuar();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
+					
 				}
 				
 			}
@@ -255,8 +259,9 @@ public class Principal extends JFrame implements ActionListener{
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					titoga.control.stop();
-				} catch (BasicPlayerException e1) {
+					//titoga.Stop();
+					rep=false;
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -270,8 +275,8 @@ public class Principal extends JFrame implements ActionListener{
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					titoga.control.pause();
-				} catch (BasicPlayerException e1) {
+					//titoga.Pausa();
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -368,21 +373,24 @@ public class Principal extends JFrame implements ActionListener{
 				 cBTitulo.addItem(item);
 			 }
 		 }else if(e.getSource()==btnBuscar){
-			listModel.removeAllElements();
+			
 			 String texto="";
 			 Album tem;
-			 temp.clear();
+			 
 			 titulo= (String) cBTitulo.getSelectedItem();
 			 autor= (String) cBAutor.getSelectedItem();
 			 if((titulo.equalsIgnoreCase("vacio")&&autor.equalsIgnoreCase("vacio"))||
 					 (!(titulo.equalsIgnoreCase("vacio"))&&!(autor.equalsIgnoreCase("vacio")))){
 				 JOptionPane.showMessageDialog(null, "Debe seleccionar solamente un autor o un titulo.\nY el otro campo debe quedar en vacio");
 			 }else if(titulo.equalsIgnoreCase("vacio")){
+				 temp.clear();
 				for(i=0; i<Lexico.Album.size();i++){
 					if (Lexico.Album.get(i).getAutor().equalsIgnoreCase(autor)){
 						System.out.println(Lexico.Album.size());
 						tem=Lexico.Album.get(i);
 						temp.add(tem);
+						System.out.println("Agregue album "+i);
+						System.out.println(Lexico.Album.get(i).ObtenerCanciones().size());
 					}
 				}
 				txtAlbumes.setText(""+temp.size());
@@ -390,17 +398,30 @@ public class Principal extends JFrame implements ActionListener{
 				txtAutor.setText(temp.get(0).getAutor());
 				txtFormato.setText(temp.get(0).getFormato());
 				lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(0).getPortada())));
+				 System.out.println(canciones.size());
+				 System.out.println(temp.get(0).ObtenerCanciones()+"tamaño de temp");
 				canciones.clear();
-				canciones = temp.get(0).ObtenerCanciones();
+				 System.out.println(canciones.size());
+				 ArrayList  <String> tempo= new ArrayList <String>();
+				tempo = temp.get(0).ObtenerCanciones();
+				System.out.println(tempo.size()+"Tamaño de tempo");
+				canciones=tempo;
+				 System.out.println(canciones.size()+"tamaño de canciones");
+				 System.out.println(temp.get(0).ObtenerCanciones()+"tamaño de temp");
+				 listModel.removeAllElements();
 				for(i=0; i<canciones.size();i++){
 					listModel.addElement(canciones.get(i));
+					 System.out.println("Agregue canciones "+i);
 				}
 				
 			 }else if(autor.equalsIgnoreCase("vacio")){
+				 temp.clear();
 				 for(i=0;i<Lexico.Album.size();i++){
 					 if(Lexico.Album.get(i).getTitulo().equalsIgnoreCase(titulo)){
 						 tem=Lexico.Album.get(i);
 						 temp.add(tem);
+						 System.out.println("Agregue album "+i);
+						 System.out.println(Lexico.Album.get(i).ObtenerCanciones().size());
 					 }
 				 }
 				 txtAlbumes.setText(""+temp.size());
@@ -408,16 +429,22 @@ public class Principal extends JFrame implements ActionListener{
 				 txtAutor.setText(temp.get(0).getAutor());
 				 txtFormato.setText(temp.get(0).getFormato());
 				 lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(0).getPortada())));
+				 System.out.println(canciones.size());
 				 canciones.clear();
+				 System.out.println(canciones.size());
 				 canciones = temp.get(0).ObtenerCanciones();
+				 System.out.println(canciones.size());
+				 listModel.removeAllElements();
 				 for(i=0; i<canciones.size();i++){
 					 listModel.addElement(canciones.get(i));
+					 System.out.println("Agregue cancion "+i);
 				 }
 			 }
 			 
 			 
 		 }else if(e.getSource()==btnSiguiente){
 			 canciones.clear();
+			 listModel.removeAllElements();
 			 titulo= txtTitulo.getText();
 			 autor=txtAutor.getText();
 			 int cont=0;
@@ -429,18 +456,36 @@ public class Principal extends JFrame implements ActionListener{
 					 cont++;
 				 }
 			 }
-			 txtAlbumes.setText(""+temp.size());
+			 if(cont<temp.size()-1){
+				 txtAlbumes.setText(""+temp.size());
 			 txtTitulo.setText(temp.get(cont+1).getTitulo());
 			 txtAutor.setText(temp.get(cont+1).getAutor());
 			 txtFormato.setText(temp.get(cont+1).getFormato());
 			 lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(cont+1).getPortada())));
 			 canciones = temp.get(cont+1).ObtenerCanciones();
+			 System.out.println("Obtuve canciones");
+			 listModel.removeAllElements();
 			 for(i=0; i<canciones.size();i++){
 				 listModel.addElement(canciones.get(i));
 			 }
+			 }else if(cont==temp.size()-1){
+				 txtAlbumes.setText(""+temp.size());
+				 txtTitulo.setText(temp.get(cont).getTitulo());
+				 txtAutor.setText(temp.get(cont).getAutor());
+				 txtFormato.setText(temp.get(cont+1).getFormato());
+				 lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(cont).getPortada())));
+				 canciones = temp.get(cont).ObtenerCanciones();
+				 System.out.println("Obtuve canciones");
+				 listModel.removeAllElements();
+				 for(i=0; i<canciones.size();i++){
+					 listModel.addElement(canciones.get(i));
+				 }
+			 }
+			 
 			 
 		 }else if(e.getSource()==btnAnterior){
 			 canciones.clear();
+			 
 			 titulo= txtTitulo.getText();
 			 autor=txtAutor.getText();
 			 int cont=0;
@@ -452,15 +497,30 @@ public class Principal extends JFrame implements ActionListener{
 					 cont++;
 				 }
 			 }
-			 txtAlbumes.setText(""+temp.size());
+			 if(cont>0){
+				  txtAlbumes.setText(""+temp.size());
 			 txtTitulo.setText(temp.get(cont-1).getTitulo());
 			 txtAutor.setText(temp.get(cont-1).getAutor());
 			 txtFormato.setText(temp.get(cont-1).getFormato());
 			 lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(cont-1).getPortada())));
 			 canciones = temp.get(cont-1).ObtenerCanciones();
+			 listModel.removeAllElements();
 			 for(i=0; i<canciones.size();i++){
 				 listModel.addElement(canciones.get(i));
 			 }
+			 }else if(cont==0){
+				  txtAlbumes.setText(""+temp.size());
+					 txtTitulo.setText(temp.get(temp.size()-1).getTitulo());
+					 txtAutor.setText(temp.get(temp.size()-1).getAutor());
+					 txtFormato.setText(temp.get(temp.size()-1).getFormato());
+					 lblImagen.setIcon(new ImageIcon(Principal.class.getResource("/Imagenes/"+temp.get(temp.size()-1).getPortada())));
+					 canciones = temp.get(temp.size()-1).ObtenerCanciones();
+					 listModel.removeAllElements();
+					 for(i=0; i<canciones.size();i++){
+						 listModel.addElement(canciones.get(i));
+					 }
+			 }
+			
 		 }
 	}
 }

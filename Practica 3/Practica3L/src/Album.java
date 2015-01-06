@@ -19,7 +19,11 @@ public class Album {
 		canciones.add(cancion);
 	}
 	public ArrayList<String> ObtenerCanciones (){
-		return canciones;
+		 System.out.println("Devolvi canciones");
+		 System.out.println(autor+titulo);
+		 ArrayList  <String> temp= new ArrayList <String>();
+		 temp=canciones;
+		return temp;
 	}
 	public int NumeroCanciones(){
 		return canciones.size();
